@@ -9,13 +9,17 @@
       "jsx": true
     }
   },
+  // "rules": {
+  //   "prettier/prettier": [
+  //     "warn",
+  //     {
+  //       "usePrettierrc": true
+  //     }
+  //   ],
+
   "rules": {
-    "prettier/prettier": [
-      "warn",
-      {
-        "usePrettierrc": true
-      }
-    ],
+    "prettier/prettier": "off",
+    
     "react/react-in-jsx-scope": "off",
     "comma-dangle": "off",
     "use-isnan": ["error", { "enforceForSwitchCase": true }],
