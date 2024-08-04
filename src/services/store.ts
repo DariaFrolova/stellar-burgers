@@ -9,6 +9,7 @@ import {
 import burgerConstructorReducer from './slices/burgerConstructorSlice';
 import feedSliceReducer from './slices/feedSlice';
 import ingredientsSliceReducer from './slices/ingredientsSlice';
+// import ingredientsReducer from './slices/ingredientsSlice'; //изменено
 import userReducer from './slices/userSlice';
 import orderReducer from './slices/orderSlice';
 
@@ -16,6 +17,7 @@ const rootReducer = combineReducers({
   burgerConstructor: burgerConstructorReducer,
   feedSlice: feedSliceReducer,
   ingredients: ingredientsSliceReducer,
+  // ingredients: ingredientsReducer, //изменено
   user: userReducer,
   orderBurger: orderReducer
 });

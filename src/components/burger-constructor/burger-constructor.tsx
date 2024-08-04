@@ -135,6 +135,8 @@
 //   );
 // };
 
+
+//рабочее
 import { FC, useMemo } from 'react';
 import { TConstructorIngredient } from '@utils-types';
 import { BurgerConstructorUI } from '@ui';

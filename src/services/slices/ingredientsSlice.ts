@@ -4,6 +4,7 @@ import { TIngredient } from '@utils-types'; // Импортируем тип и�
 
 // Интерфейс состояния ингредиентов
 interface IIngredientsState {
+  items: any;
   data: TIngredient[]; // Массив ингредиентов
   loading: boolean; // Статус загрузки
 }
@@ -11,7 +12,8 @@ interface IIngredientsState {
 // Начальное состояние с пустым массивом ингредиентов и флагом загрузки
 const initialState: IIngredientsState = {
   data: [],
-  loading: false
+  loading: false,
+  items: undefined //?? 
 };
 
 // Асинхронный thunk для получения всех ингредиентов

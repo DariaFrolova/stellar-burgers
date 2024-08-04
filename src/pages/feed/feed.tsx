@@ -1,17 +1,56 @@
+import React, { FC, useEffect } from 'react';
+
 import { Preloader } from '@ui';
 import { FeedUI } from '@ui-pages';
 import { TOrder } from '@utils-types';
-import { FC } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState, AppDispatch } from 'src/services/store';
 
-//сюда
+import { getFeedAll } from '../../services/slices/feedSlice'; 
 
+   
 export const Feed: FC = () => {
-  /** TODO: взять переменную из стора */
-  const orders: TOrder[] = [];
 
-  if (!orders.length) {
+  const dispatch = useDispatch<AppDispatch>();
+ 
+  const orders: TOrder[] = useSelector((state: RootState) => state.feedSlice.orders);
+  const loading: boolean = useSelector((state: RootState) => state.feedSlice.loading);
+
+  const handleGetFeeds = () => {
+    dispatch(getFeedAll());
+  };
+
+  useEffect(() => {
+    handleGetFeeds(); // Первоначальная загрузка фидов
+  }, [dispatch]);
+
+  if (loading) {
     return <Preloader />;
   }
 
-  <FeedUI orders={orders} handleGetFeeds={() => {}} />;
+  if (!orders.length) {
+    return <div>Нет доступных заказов.</div>;
+  }
+
+  return (
+    <FeedUI 
+      orders={orders} 
+      handleGetFeeds={handleGetFeeds} // Передаем функцию
+    />
+  );
+
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
