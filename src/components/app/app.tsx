@@ -112,6 +112,16 @@ const App = () => {
               <ProfileOrders />
             </ProtectedRoute>
           }
+        /> 
+
+           {/* Защищенный маршрут для Register */}
+           <Route
+          path='/register'
+          element={
+            <ProtectedRoute onlyUnAuth>
+              <Register />
+            </ProtectedRoute>
+          }
         />
 
         <Route path='*' element={<NotFound404 />} />
