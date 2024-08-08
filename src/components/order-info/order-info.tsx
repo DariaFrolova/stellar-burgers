@@ -4,7 +4,7 @@ import { FC, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { Preloader } from '../ui/preloader';
 import { OrderInfoUI } from '../ui/order-info';
-import { TIngredient, TOrder } from '@utils-types';  
+import { TIngredient } from '@utils-types';  
 import { selectOrderModalData } from '../../services/slices/feedSlice';  
 import { selectIngredients } from '../../services/slices/ingredientsSlice';  
 
