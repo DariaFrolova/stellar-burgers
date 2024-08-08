@@ -6,9 +6,7 @@ import {
   registerUserApi,
   updateUserApi,
   getOrdersApi,
-  TRegisterData,
-  fetchWithRefresh
-} from '@api';
+  TRegisterData} from '@api';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { TUser, TOrder } from '@utils-types';
 import { getCookie, deleteCookie, setCookie } from '../../utils/cookie';
