@@ -1,5 +1,3 @@
-//вариант который работает но не то 
-
 import { FC, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { Preloader } from '../ui/preloader';
