@@ -8,7 +8,7 @@ import { OrderCardUI } from '../ui/order-card';
 import { useSelector } from '../../services/store';
 import { selectIngredients } from '../../services/slices/ingredientsSlice';
 
-const maxIngredients = 6;
+const maxIngredients = 6; // Максимальное количество ингредиентов для отображения
 
 export const OrderCard: FC<OrderCardProps> = memo(({ order }) => {
   const location = useLocation();
@@ -18,30 +18,54 @@ export const OrderCard: FC<OrderCardProps> = memo(({ order }) => {
   const orderInfo = useMemo(() => {
     if (!ingredients.length) return null;
 
-    const ingredientsInfo = order.ingredients.reduce(
-      (acc: TIngredient[], item: string) => {
-        const ingredient = ingredients.find((ing) => ing._id === item);
-        // Проверяем количество добавленных ингредиентов
-        if (ingredient && acc.length < maxIngredients) {
-          return [...acc, ingredient]; // Добавляем только, если не превышает лимит
-        }
-        return acc; // Возвращаем предыдущие ингредиенты, если лимит превышен
-      },
-      []
-    );
+    const ingredientMap: Record<string, { ingredient: TIngredient; count: number }> = {};
 
-    const total = ingredientsInfo.reduce((acc, item) => acc + item.price, 0);
+    order.ingredients.forEach((item: string) => {
+      const ingredient = ingredients.find((ing) => ing._id === item);
+      if (ingredient) {
+        if (!ingredientMap[item]) {
+          ingredientMap[item] = { ingredient, count: 0 };
+        }
+        ingredientMap[item].count++;
+      }
+    });
+
+     // Формируем массив ингредиентов для отображения (булочки и начинки)
+    const ingredientsInfo = Object.values(ingredientMap)
+      .slice(0, maxIngredients)
+      .reduce<{ bun: TIngredient[]; fillings: TIngredient[] }>(
+        (acc, item) => {
+          if (item.ingredient.type === 'bun') {
+            acc.bun.push(item.ingredient);
+          } else {
+            acc.fillings.push(item.ingredient);
+          }
+          return acc;
+        },
+        { bun: [], fillings: [] }
+      );
+
+    const orderedIngredientsInfo = [...ingredientsInfo.bun, ...ingredientsInfo.fillings];
+
+    // Вычисление общей стоимости заказа
+    const total = Object.values(ingredientMap).reduce((acc, item) => {
+      const itemCount = item.ingredient.type === 'bun' ? item.count * 2 : item.count;
+      return acc + item.ingredient.price * itemCount; // Учитываем, что одна булочка используется для верхней и нижней части
+    }, 0);
 
     const remains =
       order.ingredients.length > maxIngredients
         ? order.ingredients.length - maxIngredients
         : 0;
 
+        // Форматируем дату создания заказа
     const date = new Date(order.createdAt);
+
+    // Возвращаем итоговую информацию о заказе
     return {
       ...order,
-      ingredientsInfo,
-      ingredientsToShow: ingredientsInfo, // Теперь ingredientsToShow будет ограничен maxIngredients
+      ingredientsInfo: orderedIngredientsInfo,
+      ingredientsToShow: orderedIngredientsInfo,
       remains,
       total,
       date,
@@ -58,68 +82,3 @@ export const OrderCard: FC<OrderCardProps> = memo(({ order }) => {
     />
   );
 });
-
-
-// import { FC, memo, useMemo } from 'react';
-// import { useLocation } from 'react-router-dom';
-
-// import { OrderCardProps } from './type';
-// import { TIngredient } from '@utils-types';
-// import { OrderCardUI } from '../ui/order-card';
-
-// import { useSelector } from '../../services/store';
-// import { selectIngredients } from '../../services/slices/ingredientsSlice';
-
-
-// const maxIngredients = 6;
-
-// export const OrderCard: FC<OrderCardProps> = memo(({ order }) => {
-//   const location = useLocation();
-
-//   /** TODO: взять переменную из стора */
-//   // const ingredients: TIngredient[] = [];
-
-//   const ingredients: TIngredient[] = useSelector(selectIngredients);
-
-//   const orderInfo = useMemo(() => {
-//     if (!ingredients.length) return null;
-
-//     const ingredientsInfo = order.ingredients.reduce(
-//       (acc: TIngredient[], item: string) => {
-//         const ingredient = ingredients.find((ing) => ing._id === item);
-//         if (ingredient) return [...acc, ingredient];
-//         return acc;
-//       },
-//       []
-//     );
-
-//     const total = ingredientsInfo.reduce((acc, item) => acc + item.price, 0);
-
-//     const ingredientsToShow = ingredientsInfo.slice(0, maxIngredients);
-
-//     const remains =
-//       ingredientsInfo.length > maxIngredients
-//         ? ingredientsInfo.length - maxIngredients
-//         : 0;
-
-//     const date = new Date(order.createdAt);
-//     return {
-//       ...order,
-//       ingredientsInfo,
-//       ingredientsToShow,
-//       remains,
-//       total,
-//       date
-//     };
-//   }, [order, ingredients]);
-
-//   if (!orderInfo) return null;
-
-//   return (
-//     <OrderCardUI
-//       orderInfo={orderInfo}
-//       maxIngredients={maxIngredients}
-//       locationState={{ background: location }}
-//     />
-//   );
-// });

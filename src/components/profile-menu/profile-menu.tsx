@@ -11,7 +11,7 @@ export const ProfileMenu: FC = () => {
 
   const handleLogout = async () => {
     try {
-      await dispatch(logout()).unwrap();  // Распаковка промиса для обработки ошибок
+      await dispatch(logout()).unwrap();   
       navigate('/');  // Перенаправление на главную страницу после успешного выхода
     } catch (error) {
       // Улучшаем обработку ошибок для информирования пользователя
@@ -27,18 +27,3 @@ export const ProfileMenu: FC = () => {
     />
   );
 };
-
-
-// import { FC } from 'react';
-// import { useLocation } from 'react-router-dom';
-// import { ProfileMenuUI } from '@ui';
-
-// //сюда
-
-// export const ProfileMenu: FC = () => {
-//   const { pathname } = useLocation();
-
-//   const handleLogout = () => {};
-
-//   return <ProfileMenuUI handleLogout={handleLogout} pathname={pathname} />;
-// };

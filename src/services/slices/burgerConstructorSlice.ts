@@ -6,7 +6,7 @@ import { RootState } from '../store';
 
 // Определяем интерфейс состояния конструктора бургера
 interface IBurgerConstructorState {
-  bun: TConstructorIngredient | null; // Хранит булку
+  bun: TConstructorIngredient | null; // Хранит булочку 
   ingredients: TConstructorIngredient[]; // Хранит список ингредиентов
 }
 
@@ -20,17 +20,16 @@ const initialState: IBurgerConstructorState = {
 const burgerConstructorSlice = createSlice({
   name: 'burgerConstructor',
   initialState,
-
   reducers: {
-    // Добавляем ингредиент (булку или другой ингредиент)
+    // Добавляем ингредиент (булочку или что-то еще)
     addIngredientToOrder: {
       reducer: (state, action: PayloadAction<TConstructorIngredient>) => {
         const { type } = action.payload;
-        // Проверяем тип ингредиента: если булка - сохраняем как булку, иначе добавляем в обычные ингредиенты
+        // Проверяем тип ингредиента: если булочка - сохраняем как булку, иначе добавляем в обычные ингредиенты
         if (type === 'bun') {
-          state.bun = action.payload; // Сохраняем булку
+          state.bun = action.payload; // Сохраняем 
         } else {
-          state.ingredients.push(action.payload); // Добавляем обычный ингредиент
+          state.ingredients.push(action.payload); // Добавляем другие ингредиент
         }
       },
       prepare: (ingredient: TIngredient) => {
@@ -72,7 +71,7 @@ const burgerConstructorSlice = createSlice({
   }
 });
 
-// Экспортируем действия (action creators)
+// Экспортируем действия 
 export const {
   addIngredientToOrder,
   changeIngredientLayer,
@@ -85,27 +84,3 @@ export default burgerConstructorSlice.reducer;
 
 // Экспорт селектора
 export const constructorSelector = (state: RootState) => state.burgerConstructor;
-
-
-
-
-// export const selectBurgerConstructorState = (state: {
-//   burgerConstructor: IBurgerConstructorState;
-// }) => state.burgerConstructor;
-
-
-// export const selectBun = createSelector(
-//   [selectBurgerConstructorState],
-//   (burgerConstructor) => burgerConstructor.bun
-// );
-
-// export const selectIngredients = createSelector(
-//   [selectBurgerConstructorState],
-//   (burgerConstructor) => burgerConstructor.ingredients
-// );
-
-
-// // Экспортируем редьюсер
-// export default burgerConstructorSlice.reducer; 
-
-

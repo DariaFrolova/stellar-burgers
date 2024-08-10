@@ -1,6 +1,6 @@
-import { getIngredientsApi } from '@api'; // Импорт API для получения ингредиентов
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'; // Импортируем необходимое из Redux Toolkit
-import { TIngredient } from '@utils-types'; // Импортируем тип ингредиента
+import { getIngredientsApi } from '@api';  
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';  
+import { TIngredient } from '@utils-types';  
 
 // Интерфейс состояния ингредиентов
 interface IIngredientsState {
@@ -9,7 +9,6 @@ interface IIngredientsState {
   loading: boolean; // Статус загрузки
 }
 
-// Начальное состояние с пустым массивом ингредиентов и флагом загрузки
 const initialState: IIngredientsState = {
   data: [],
   loading: false,
@@ -22,13 +21,12 @@ export const fetchAllIngredients = createAsyncThunk<
   void,
   { rejectValue: string }
 >(
-  'ingredients/fetchAllIngredients', // Имя для этого действия
+  'ingredients/fetchAllIngredients',  
   async (_, { rejectWithValue }) => {
     try {
-      const response = await getIngredientsApi(); // Запрос к API
-      return response; // Возвращаем ответ от API
+      const response = await getIngredientsApi();  
+      return response;  
     } catch (error) {
-      // Обработка ошибок
       return rejectWithValue(
         error instanceof Error ? error.message : 'Неизвестная ошибка'
       );
@@ -40,7 +38,7 @@ export const fetchAllIngredients = createAsyncThunk<
 const ingredientsSlice = createSlice({
   name: 'ingredients',
   initialState,
-  reducers: {}, // Тут редюсеры не нужны
+  reducers: {},  
   extraReducers: (builder) => {
     builder
       .addCase(fetchAllIngredients.pending, (state) => {

@@ -2,76 +2,52 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { getFeedsApi, getOrderByNumberApi, getOrdersApi } from '@api';
 import { TOrdersData, TOrder } from '@utils-types';
 
-type TOrderResponse = TOrder;
-
 // Интерфейс для состояния
 interface FeedState {
   orders: TOrder[];
-  orderModalData: TOrder | null;
+  orderModalData: TOrder[];
+  profileOrders: TOrder[];
   total: number;
   totalToday: number;
   loading: boolean;
-  error: string | null;
+  error?: string | null;
 }
 
 // Определяем начальное состояние
 const initialState: FeedState = {
   orders: [],
-  orderModalData: null,
+  orderModalData: [],
+  profileOrders: [],
   total: 0,
   totalToday: 0,
   loading: false,
   error: null
 };
 
-export const getFeedAll = createAsyncThunk<TOrdersData, void>(
-  'feed/getFeedAll',
-  async () => {
-    const response = await getFeedsApi();
-    return response;
-  }
+
+export const getFeedAll = createAsyncThunk('feed/getFeedAll', getFeedsApi);
+
+
+export const getOrders = createAsyncThunk('order/getOrders', getOrdersApi);
+
+
+export const getOrderByNumber = createAsyncThunk(
+  'order/getOrderByNumber',
+  getOrderByNumberApi
 );
 
-export const getOrders = createAsyncThunk<TOrder[], void>(
-  'feed/getOrders',
-  async () => {
-    const response = await getOrdersApi();
-    return response;
-  }
-);
-
-export const getOrderByNumber = createAsyncThunk<
-  TOrder,
-  number,
-  { rejectValue: string }
->('order/getOrderByNumber', async (number, { rejectWithValue }) => {
-  try {
-    const response = await getOrderByNumberApi(number);
-    return response as unknown as TOrder;
-  } catch (error) {
-    return rejectWithValue(
-      '👽 Упс, что-то пошло не так, мы не получили номер заказа'
-    );
-  }
-});
-
-// Новый thunk для получения всех заказов
 export const fetchOrders = createAsyncThunk<TOrdersData, void>(
   'feed/fetchOrders',
   async () => {
     const orders = await getOrdersApi();
-    return { orders, total: orders.length, totalToday: 0 }; // Пример: total и totalToday могут быть изменены по необходимости
+    return { orders, total: orders.length, totalToday: 0 }; 
   }
 );
 
 const feedSlice = createSlice({
   name: 'feed',
   initialState,
-  reducers: {
-    setOrderModalData: (state, action) => {
-      state.orderModalData = action.payload;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(getFeedAll.pending, (state) => {
@@ -80,9 +56,9 @@ const feedSlice = createSlice({
       })
       .addCase(getFeedAll.fulfilled, (state, action) => {
         state.loading = false;
-        state.orders = action.payload.orders; // 'action.payload' содержит массив заказов
-        state.total = action.payload.total; // Обновляем общее количество заказов
-        state.totalToday = action.payload.totalToday; // Обновляем количество заказов за сегодня
+        state.total = action.payload.total;
+        state.totalToday = action.payload.totalToday;
+        state.orders = action.payload.orders;
       })
       .addCase(getFeedAll.rejected, (state, action) => {
         state.loading = false;
@@ -100,6 +76,18 @@ const feedSlice = createSlice({
       .addCase(getOrders.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message || 'Ошибка при загрузке заказов';
+      })
+
+      .addCase(getOrderByNumber.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getOrderByNumber.fulfilled, (state, action) => {
+        state.loading = false;
+        state.orderModalData = action.payload.orders;
+      })
+      .addCase(getOrderByNumber.rejected, (state, action) => {
+        state.loading = false;
       });
   },
 });
@@ -107,24 +95,12 @@ const feedSlice = createSlice({
 
 export default feedSlice.reducer;
 
-// Селекторы для извлечения состояния
-export const selectOrders = (state: { feed: typeof initialState }) =>
-  state.feed.orders;
-
-export const selectTotal = (state: { feed: typeof initialState }) =>
-  state.feed.total;
-export const selectTotalToday = (state: { feed: typeof initialState }) =>
-  state.feed.totalToday;
-export const selectLoading = (state: { feed: typeof initialState }) =>
-  state.feed.loading;
-export const selectError = (state: { feed: typeof initialState }) =>
-  state.feed.error;
-
-  export const selectOrderModalData = (state: { feedSlice: typeof initialState }) => 
-  state.feedSlice.orderModalData;
-
 export const getProfileOrders = (state: { feedSlice: FeedState }) =>
   state.feedSlice.orders;
 
-
-
+export const selectFeedLoading = (state: { feedSlice: FeedState }) => state.feedSlice.loading;
+export const selectFeedOrders = (state: { feedSlice: FeedState }) => state.feedSlice.orders;
+export const selectProfileOrders = (state: { feedSlice: FeedState }) => state.feedSlice.profileOrders;
+export const selectTotal = (state: { feedSlice: FeedState }) => state.feedSlice.total;
+export const selectTotalToday = (state: { feedSlice: FeedState }) => state.feedSlice.totalToday;
+export const selectOrderModalData = (state: { feedSlice: FeedState }) => state.feedSlice.orderModalData[0];

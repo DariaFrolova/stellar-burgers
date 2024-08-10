@@ -28,25 +28,3 @@ export const IngredientDetails: FC = () => {
    // Если данные ингредиента найдены, рендерим компонент 
   return <IngredientDetailsUI ingredientData={ingredientData} />;
 };
-
-
-
-
-// исходник
-
-// import { FC } from 'react';
-// import { Preloader } from '../ui/preloader';
-// import { IngredientDetailsUI } from '../ui/ingredient-details';
-
-// //сюда
-
-// export const IngredientDetails: FC = () => {
-//   /** TODO: взять переменную из стора */
-//   const ingredientData = null;
-
-//   if (!ingredientData) {
-//     return <Preloader />;
-//   }
-
-//   return <IngredientDetailsUI ingredientData={ingredientData} />;
-// };
