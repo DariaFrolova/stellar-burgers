@@ -17,7 +17,7 @@ export const OrderInfo: FC = () => {
 
   useEffect(() => {
     if (number) {
-      dispatch(getOrderByNumber(Number(number!))); // Если номер присутствует, запрашиваем данные заказа
+      dispatch(getOrderByNumber(Number(number!))); // Если номер есть, запрашиваем данные заказа
     }
   }, [dispatch, number]);
 
