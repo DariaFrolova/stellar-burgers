@@ -23,6 +23,7 @@ import { fetchAllIngredients } from '../../services/slices/ingredientsSlice';
 
 import { checkUserAuth, getUserProfile } from '../../services/slices/userSlice';
 
+
 const App = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -76,9 +77,17 @@ const App = () => {
       <Routes location={backgroundLocation || location}>
         <Route path='/' element={<ConstructorPage />} />
         <Route path='/feed' element={<Feed />} />
-        <Route path='/login' element={<Login />} />
+        {/* теперь заказ открываеся в отдельном окне */}
+        <Route path='/feed/:number' element={<OrderInfo />} /> 
 
-       
+        <Route
+          path='/login'
+          element={
+            <ProtectedRoute onlyUnAuth>
+              <Login />
+            </ProtectedRoute>
+          }
+        />
         <Route
           path='/forgot-password'
           element={
@@ -96,7 +105,6 @@ const App = () => {
           }
         />
 
-       
         <Route
           path='/profile'
           element={
@@ -112,16 +120,28 @@ const App = () => {
               <ProfileOrders />
             </ProtectedRoute>
           }
-        /> 
+        />
+        <Route
+          path='/profile/orders/:number'
+          element={
+            <ProtectedRoute>
+              <OrderInfo />
+            </ProtectedRoute>
+          }
+        />
 
-          
-           <Route
+        <Route
           path='/register'
           element={
             <ProtectedRoute onlyUnAuth>
               <Register />
             </ProtectedRoute>
           }
+        />
+{/* и ингредиент теперь тоже открывается в отдельном окне */}
+        <Route
+          path='/ingredients/:id'
+          element={<IngredientDetails />}
         />
 
         <Route path='*' element={<NotFound404 />} />

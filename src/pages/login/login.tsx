@@ -19,10 +19,10 @@ export const Login: FC = () => {
     dispatch(userLogin({ email, password }));
   };
 
-  // Если пользователь уже аутентифицирован, перенаправляем его на главную
-  if (isAuthenticated) {
-    return <Navigate to='/' />;
-  }
+  // // Если пользователь уже аутентифицирован, перенаправляем его на главную
+  // if (isAuthenticated) {
+  //   return <Navigate to='/' />;
+  // }
 
   // Отображаем интерфейс для входа
   return (
