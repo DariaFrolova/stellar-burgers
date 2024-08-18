@@ -11,7 +11,7 @@ interface IBurgerConstructorState {
 }
 
 // Начальное состояние
-const initialState: IBurgerConstructorState = {
+export const initialState: IBurgerConstructorState = {
   bun: null,
   ingredients: []
 };
@@ -84,3 +84,5 @@ export default burgerConstructorSlice.reducer;
 
 // Экспорт селектора
 export const constructorSelector = (state: RootState) => state.burgerConstructor;
+
+export const burgerConstructorReducer = burgerConstructorSlice.reducer;

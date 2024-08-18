@@ -1,6 +1,16 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { getFeedsApi, getOrderByNumberApi, getOrdersApi } from '@api';
-import { TOrdersData, TOrder } from '@utils-types';
+// import { getFeedsApi, getOrderByNumberApi, getOrdersApi } from '@api';
+
+import {
+  getFeedsApi,
+  getOrderByNumberApi,
+  getOrdersApi
+} from '../../utils/burger-api';
+
+// import { TOrdersData, TOrder } from '@utils-types';
+
+import { TOrdersData, TOrder } from '../../utils/types';
+
 
 // Интерфейс для состояния
 interface FeedState {
@@ -14,7 +24,7 @@ interface FeedState {
 }
 
 // Определяем начальное состояние
-const initialState: FeedState = {
+export const initialState: FeedState = {
   orders: [],
   orderModalData: [],
   profileOrders: [],
@@ -26,7 +36,6 @@ const initialState: FeedState = {
 
 
 export const getFeedAll = createAsyncThunk('feed/getFeedAll', getFeedsApi);
-
 
 export const getOrders = createAsyncThunk('order/getOrders', getOrdersApi);
 
@@ -65,6 +74,14 @@ const feedSlice = createSlice({
         state.error =
           action.error.message || 'Ошибка при загрузке всех заказов';
       })
+
+      .addCase(fetchOrders.fulfilled, (state, action) => {
+        state.loading = false;
+        state.orders = action.payload.orders;
+        state.total = action.payload.total;
+        state.totalToday = action.payload.totalToday;
+      })
+      
       .addCase(getOrders.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -94,6 +111,8 @@ const feedSlice = createSlice({
 
 
 export default feedSlice.reducer;
+
+// export const feedSliceReducer = feedSlice.reducer;
 
 export const getProfileOrders = (state: { feedSlice: FeedState }) =>
   state.feedSlice.orders;
