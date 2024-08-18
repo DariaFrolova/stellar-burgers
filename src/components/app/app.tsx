@@ -17,12 +17,11 @@ import styles from './app.module.css';
 import { AppHeader, Modal, IngredientDetails, OrderInfo } from '@components';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from 'src/services/store';
-import { ProtectedRoute } from '../../protected-route/ProtectedRoute'; 
+import { ProtectedRoute } from '../../protected-route/ProtectedRoute';
 
 import { fetchAllIngredients } from '../../services/slices/ingredientsSlice';
 
 import { checkUserAuth, getUserProfile } from '../../services/slices/userSlice';
-
 
 const App = () => {
   const location = useLocation();
@@ -77,8 +76,7 @@ const App = () => {
       <Routes location={backgroundLocation || location}>
         <Route path='/' element={<ConstructorPage />} />
         <Route path='/feed' element={<Feed />} />
-        {/* теперь заказ открываеся в отдельном окне */}
-        <Route path='/feed/:number' element={<OrderInfo />} /> 
+        <Route path='/feed/:number' element={<OrderInfo />} />
 
         <Route
           path='/login'
@@ -138,11 +136,7 @@ const App = () => {
             </ProtectedRoute>
           }
         />
-{/* и ингредиент теперь тоже открывается в отдельном окне */}
-        <Route
-          path='/ingredients/:id'
-          element={<IngredientDetails />}
-        />
+        <Route path='/ingredients/:id' element={<IngredientDetails />} />
 
         <Route path='*' element={<NotFound404 />} />
       </Routes>

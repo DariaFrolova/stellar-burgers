@@ -1,0 +1,8 @@
+{
+  "extends": "../tsconfig.json", // Наследуем настройки из корневого tsconfig
+  "compilerOptions": {
+    "noEmit": true, // Не генерировать выходные файлы
+    "types": ["cypress"] // Используем типы из Cypress, чтобы избежать конфликта с jest
+  },
+  "include": ["../node_modules/cypress", "./**/*.ts", "./**/*.tsx"]
+}
