@@ -1,12 +1,22 @@
+// import {
+//   loginUserApi,
+//   TLoginData,
+//   logoutApi,
+//   getUserApi,
+//   registerUserApi,
+//   updateUserApi,
+//   getOrdersApi,
+//   TRegisterData} from '@api';
+
 import {
-  loginUserApi,
-  TLoginData,
-  logoutApi,
-  getUserApi,
-  registerUserApi,
-  updateUserApi,
-  getOrdersApi,
-  TRegisterData} from '@api';
+    loginUserApi,
+    TLoginData,
+    logoutApi,
+    getUserApi,
+    registerUserApi,
+    updateUserApi,
+    getOrdersApi,
+    TRegisterData} from'../../utils/burger-api';
 import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit';
 import { TUser, TOrder } from '@utils-types';
 import { getCookie, deleteCookie, setCookie } from '../../utils/cookie';
@@ -23,7 +33,7 @@ interface TUserState {
 
 // Начальное состояние пользователя
 
-const initialState: TUserState = {
+export const initialState: TUserState = {
   isAuth: false,
   user: null,
   orders: [],
